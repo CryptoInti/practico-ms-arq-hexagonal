@@ -1,0 +1,20 @@
+
+import com.empresa.practica.domain.model.Customer
+global org.springframework.data.mongodb.core.ReactiveMongoTemplate reactiveMongoTemplateB
+global com.empresa.practica.domain.repository.CustomerRepository customerRepository
+
+rule "Save loyal customer in B database"
+when
+    $customer : Customer(loyal == true)
+then
+    System.out.println("Guardando en la base de datos B");
+    reactiveMongoTemplateB.save($customer, "customers");
+end
+
+rule "Save non-loyal customer in A database"
+when
+    $customer : Customer(loyal == false)
+then
+    System.out.println("Guardando en la base de datos A");
+    customerRepository.save($customer);
+end
